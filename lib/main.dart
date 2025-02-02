@@ -111,7 +111,7 @@ class _GameScreenState extends State<GameScreen> {
           Positioned(
             left: 10,
             top: 10,
-            child: Text('Score: $_score', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),,),
+            child: Text('Score: $_score', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
           ),
         ],
       ),
