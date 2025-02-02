@@ -49,8 +49,78 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _moveDot(){
-    setState(){
-      
-    }
+    setState((){
+      _xPos = _random.nextDouble() * (MediaQuery.of(context).size.width - 50);
+      _yPos = _random.nextDouble() * (MediaQuery.of(context).size.height - 150);
+    });
+  }
+
+  void _inceraseScore(){
+    setState(() {
+      _score++;
+    });
+    _resetTimer();
+    _moveDot();
+  }
+
+  void _gameOver() {
+    _timer?.cancel();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text('Game Over!'),
+        content: Text('Your score: $_score'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _score = 0;
+              });
+              Navigator.of(context).pop();
+              _startGame();
+            },
+            child: Text('Play Again'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(title: Text('Tap the dot'),),
+      body: Stack(
+        children: [
+          Positioned(
+            left: _xPos,
+            top: _yPos,
+            child: GestureDetector(
+              onTap: _inceraseScore,
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 10,
+            top: 10,
+            child: Text('Score: $_score', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),,),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 }
