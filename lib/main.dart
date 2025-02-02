@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 
-void main() => runApp(TapTheDotGame());
+void main() {
+  runApp(TapTheDotGame());
+}
 
 class TapTheDotGame extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tap the Dot',
       theme: ThemeData.dark(),
-      home: GameScreen(), 
+      home: GameScreen(),
     );
   }
 }
@@ -35,27 +37,30 @@ class _GameScreenState extends State<GameScreen> {
     _startGame();
   }
 
-  void _startGame(){
+  void _startGame() {
     _resetTimer();
     _moveDot();
   }
 
-  void _resetTimer(){
+  void _resetTimer() {
     _timer?.cancel();
-    _timeLeft = max(2, 5 - (_score ~/ 5 )); // decrease time as score increases
+    _timeLeft = max(2, 5 - (_score ~/ 5)); // Decreases time as score increases
     _timer = Timer.periodic(Duration(seconds: _timeLeft), (timer) {
       _gameOver();
     });
   }
 
-  void _moveDot(){
-    setState((){
+  void _moveDot() {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    setState(() {
       _xPos = _random.nextDouble() * (MediaQuery.of(context).size.width - 50);
       _yPos = _random.nextDouble() * (MediaQuery.of(context).size.height - 150);
     });
-  }
+  });
+}
 
-  void _inceraseScore(){
+
+  void _increaseScore() {
     setState(() {
       _score++;
     });
@@ -88,16 +93,16 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tap the dot'),),
+      appBar: AppBar(title: Text('Tap the Dot')),
       body: Stack(
         children: [
           Positioned(
             left: _xPos,
             top: _yPos,
             child: GestureDetector(
-              onTap: _inceraseScore,
+              onTap: _increaseScore,
               child: Container(
                 width: 50,
                 height: 50,
@@ -109,9 +114,12 @@ class _GameScreenState extends State<GameScreen> {
             ),
           ),
           Positioned(
-            left: 10,
-            top: 10,
-            child: Text('Score: $_score', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+            top: 20,
+            left: 20,
+            child: Text(
+              'Score: $_score',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
